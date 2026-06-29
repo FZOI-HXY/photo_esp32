@@ -374,12 +374,13 @@
             });
         }
         
-        // 更新预览帧
+        // 更新预览帧（MJPEG 流：浏览器维持单连接，无需轮询）
         function updatePreview() {
-            if (isCapturing) return;
-            
             const img = document.getElementById('preview');
-            img.src = `/api/frame?t=${new Date().getTime()}`;
+            // 仅在未连接到流时建立连接，避免重复刷新导致流重启
+            if (!img.src || !img.src.includes('/api/stream')) {
+                img.src = '/api/stream';
+            }
         }
         
         // 开始拍照
@@ -670,11 +671,16 @@
             loadFlashState();
             loadGallery();
             
-            // 每50ms更新一次预览
-            setInterval(updatePreview, 50);
-            
-            // 初始更新一次
+            // 启动 MJPEG 流连接（浏览器自动维护，无需轮询）
             updatePreview();
+
+            // 流断开时自动重连（如服务器重启）
+            const previewImg = document.getElementById('preview');
+            previewImg.onerror = function() {
+                setTimeout(function() {
+                    previewImg.src = '/api/stream';
+                }, 2000);
+            };
             
             // 初始状态
             document.getElementById('status').textContent = '就绪';

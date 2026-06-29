@@ -25,7 +25,7 @@ Write-Host ""
 
 # 检查依赖是否安装
 Write-Host "[信息] 检查依赖..." -ForegroundColor Yellow
-$dependencies = @("flask", "cv2", "numpy", "PIL")
+$dependencies = @("flask", "requests")
 $missingDeps = @()
 
 foreach ($dep in $dependencies) {

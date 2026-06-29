@@ -22,7 +22,7 @@ echo.
 
 REM 检查依赖是否安装
 echo [信息] 检查依赖...
-python -c "import flask, cv2, numpy, PIL" >nul 2>&1
+python -c "import flask, requests" >nul 2>&1
 if errorlevel 1 (
     echo [警告] 部分依赖未安装，正在安装...
     pip install -r requirements.txt

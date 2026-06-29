@@ -22,7 +22,7 @@ Try {
 # Check dependencies
 Write-Host "Checking dependencies..."
 Try {
-    python -c "import flask, cv2, numpy, PIL" 2>&1 | Out-Null
+    python -c "import flask, requests" 2>&1 | Out-Null
     Write-Host "Dependencies OK"
 } Catch {
     Write-Host "Installing dependencies..."
