@@ -12,9 +12,12 @@ import state as state_module
 
 app = Flask(__name__)
 
-UPLOAD_FOLDER = 'uploads'
-CAPTURES_FOLDER = 'captures'
-ALBUM_FOLDER = 'album'
+# 基于本文件位置定位数据目录，避免依赖 cwd
+_BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_FOLDER = os.path.join(_BASE_DIR, 'data')
+UPLOAD_FOLDER = os.path.join(DATA_FOLDER, 'uploads')
+CAPTURES_FOLDER = os.path.join(DATA_FOLDER, 'captures')
+ALBUM_FOLDER = os.path.join(DATA_FOLDER, 'album')
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp', 'bmp'}
 MAX_FILE_SIZE = 32 * 1024 * 1024  # 32MB，支持高分辨率照片
 
@@ -23,13 +26,13 @@ app.config['CAPTURES_FOLDER'] = CAPTURES_FOLDER
 app.config['ALBUM_FOLDER'] = ALBUM_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = MAX_FILE_SIZE
 # 状态持久化文件路径
-STATE_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'state.json')
+STATE_FILE = os.path.join(_BASE_DIR, 'state.json')
 app.config['STATE_FILE'] = STATE_FILE
 
-# 确保三个目录存在：外部上传、相机拍摄、相册
+# 确保三个数据目录存在：外部上传、相机拍摄、相册
 for _d in (UPLOAD_FOLDER, CAPTURES_FOLDER, ALBUM_FOLDER):
     os.makedirs(_d, exist_ok=True)
-    print(f"Folder ready: {os.path.abspath(_d)}")
+    print(f"Folder ready: {_d}")
 
 # 存储最新的画面数据
 latest_frame = None

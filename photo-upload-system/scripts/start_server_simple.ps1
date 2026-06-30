@@ -6,7 +6,7 @@ Write-Host "=========================================="
 
 # Change to backend directory
 $scriptPath = Split-Path -Parent $MyInvocation.MyCommand.Path
-$backendPath = Join-Path $scriptPath "backend"
+$backendPath = Join-Path $scriptPath "..\backend"
 Set-Location $backendPath
 
 # Check Python
@@ -29,12 +29,7 @@ Try {
     pip install -r requirements.txt
 }
 
-# Create uploads directory
-$uploadsPath = Join-Path $scriptPath "uploads"
-If (-not (Test-Path $uploadsPath)) {
-    New-Item -ItemType Directory -Path $uploadsPath | Out-Null
-    Write-Host "Created uploads directory"
-}
+# Data dirs are auto-created by app.py on startup (data/uploads, data/captures, data/album)
 
 # Start server
 Write-Host "Starting server..."

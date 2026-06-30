@@ -19,6 +19,7 @@
 
 ```
 photo-upload-system/
+├── README.md
 ├── backend/                        # 后端服务
 │   ├── app.py                      # Flask 应用主入口
 │   ├── state.py                    # 状态持久化模块
@@ -28,20 +29,24 @@ photo-upload-system/
 │   │   ├── streaming_simple.html   # 主预览页面（MJPEG 流）
 │   │   ├── streaming.html          # 旧版预览页
 │   │   └── upload.html             # 照片上传页
-│   ├── uploads/                    # 外部上传文件目录
-│   ├── captures/                   # 相机拍照暂存目录
-│   ├── album/                      # 用户相册目录
+│   ├── data/                       # 数据目录（集中存储）
+│   │   ├── uploads/                # 外部上传文件
+│   │   ├── captures/               # 相机拍照暂存
+│   │   └── album/                  # 用户相册
 │   ├── state.json                  # 持久化状态文件（自动生成）
 │   └── tests/                      # 测试套件
 │       ├── conftest.py             # pytest 夹具
 │       ├── test_app.py             # 应用测试
 │       └── test_state.py           # 状态模块测试
-├── esp32-cam/                      # 固件
-│   └── esp32cam_unified/           # 统一固件（整合版）
+├── firmware/                       # ESP32-CAM 固件
+│   └── esp32cam_unified/           # 统一固件
 │       ├── config.h                # 配置头文件
 │       └── esp32cam_unified.ino    # 主程序
-├── start_server.ps1                # Windows 启动脚本
-└── start_server.bat                # Windows 快捷启动
+└── scripts/                        # 启动脚本与工具
+    ├── start_server.ps1            # Windows 启动脚本
+    ├── start_server.bat            # Windows 快捷启动
+    ├── start_server_simple.ps1     # 精简启动脚本
+    └── bluetooth_controller.py     # 蓝牙控制工具
 ```
 
 ## 快速开始
@@ -59,7 +64,7 @@ python app.py
 或用 PowerShell 运行启动脚本：
 
 ```powershell
-.\start_server.ps1
+.\scripts\start_server.ps1
 ```
 
 ### 2. 烧录固件到 ESP32-CAM
@@ -113,11 +118,11 @@ python app.py
 
 | 目录 | 用途 | 存放内容 |
 |------|------|----------|
-| `uploads/` | 外部上传 | 通过浏览器上传的照片 |
-| `captures/` | 相机拍摄 | ESP32-CAM 拍照的原图（尚未保存到相册） |
-| `album/` | 用户相册 | 从 captures/ 或 uploads/ 保存到相册的照片 |
+| `backend/data/uploads/` | 外部上传 | 通过浏览器上传的照片 |
+| `backend/data/captures/` | 相机拍摄 | ESP32-CAM 拍照的原图（尚未保存到相册） |
+| `backend/data/album/` | 用户相册 | 从 captures/ 或 uploads/ 保存到相册的照片 |
 
-启动时自动将旧 `uploads/` 中的相册照片迁移至 `album/`，无需手动操作。
+启动时自动将旧 `data/uploads/` 中的相册照片迁移至 `data/album/`，无需手动操作。
 
 ## 测试
 

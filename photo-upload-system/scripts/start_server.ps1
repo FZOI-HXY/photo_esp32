@@ -8,7 +8,7 @@ Write-Host ""
 
 # 切换到backend目录
 $scriptPath = Split-Path -Parent $MyInvocation.MyCommand.Path
-$backendPath = Join-Path $scriptPath "backend"
+$backendPath = Join-Path $scriptPath "..\backend"
 Set-Location $backendPath
 
 # 检查Python是否安装
@@ -49,12 +49,7 @@ if ($missingDeps.Count -gt 0) {
 Write-Host "[信息] 依赖检查完成" -ForegroundColor Green
 Write-Host ""
 
-# 创建uploads目录（如果不存在）
-$uploadsPath = Join-Path $scriptPath "uploads"
-if (-not (Test-Path $uploadsPath)) {
-    New-Item -ItemType Directory -Path $uploadsPath | Out-Null
-    Write-Host "[信息] 创建uploads目录" -ForegroundColor Green
-}
+# 数据目录由 app.py 启动时自动创建（data/uploads, data/captures, data/album）
 
 # 获取本机IP地址
 $ipAddress = (Get-NetIPAddress -AddressFamily IPv4 | Where-Object { $_.IPAddress -notlike "127.*" -and $_.IPAddress -notlike "169.254.*" } | Select-Object -First 1).IPAddress

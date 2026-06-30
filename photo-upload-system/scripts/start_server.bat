@@ -6,7 +6,7 @@ echo ==========================================
 echo.
 
 REM 切换到backend目录
-cd /d "%~dp0\backend"
+cd /d "%~dp0\..\backend"
 
 REM 检查Python是否安装
 python --version >nul 2>&1
@@ -36,11 +36,7 @@ if errorlevel 1 (
 echo [信息] 依赖检查完成
 echo.
 
-REM 创建uploads目录（如果不存在）
-if not exist "..\uploads" (
-    mkdir "..\uploads"
-    echo [信息] 创建uploads目录
-)
+REM 数据目录由 app.py 启动时自动创建（data/uploads, data/captures, data/album）
 
 REM 启动服务器
 echo [信息] 启动服务器...
